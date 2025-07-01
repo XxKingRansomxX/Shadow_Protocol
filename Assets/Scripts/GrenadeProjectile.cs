@@ -11,6 +11,7 @@ public class GrenadeProjectile : MonoBehaviour
     [SerializeField] private Transform grenadeExplodeVfxPrefab;
     [SerializeField] private TrailRenderer trailRenderer;
     [SerializeField] private AnimationCurve arcYAnimationCurve;
+    [SerializeField] private AudioClip explosionClip;
 
 
     private Vector3 targetPosition;
@@ -55,6 +56,9 @@ public class GrenadeProjectile : MonoBehaviour
             trailRenderer.transform.parent = null;
 
             Instantiate(grenadeExplodeVfxPrefab, targetPosition + Vector3.up * 1f, Quaternion.identity);
+
+            if (explosionClip != null)
+                AudioSource.PlayClipAtPoint(explosionClip, targetPosition + Vector3.up * 1f, 1.0f); // 1.0f is max volume
 
             Destroy(gameObject);
 

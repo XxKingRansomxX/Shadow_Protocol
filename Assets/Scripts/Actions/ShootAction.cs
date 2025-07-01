@@ -213,4 +213,20 @@ public class ShootAction : BaseAction
         return GetValidActionGridPositionList(gridPosition).Count;
     }
 
+    public bool HasLineOfSight(Vector3 shooterPosition, Vector3 targetPosition, LayerMask obstacleMask)
+    {
+        Vector3 start = shooterPosition + Vector3.up * 1.5f; // eye/chest height
+        Vector3 end = targetPosition + Vector3.up * 1.5f;
+
+        if (Physics.Linecast(start, end, out RaycastHit hit, obstacleMask))
+        {
+            // Optionally, check if the hit object is the target
+            if (hit.transform.position == targetPosition)
+                return true; // Clear line of sight
+
+            return false; // Blocked by something
+        }
+        return true; // Nothing hit, clear line of sight
+    }
+
 }

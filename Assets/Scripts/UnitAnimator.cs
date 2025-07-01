@@ -11,6 +11,8 @@ public class UnitAnimator : MonoBehaviour
     [SerializeField] private Transform shootPointTransform;
     [SerializeField] private Transform rifleTransform;
     [SerializeField] private Transform swordTransform;
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioClip gunShotClip;
 
 
     private void Awake()
@@ -51,11 +53,13 @@ public class UnitAnimator : MonoBehaviour
 
     private void MoveAction_OnStartMoving(object sender, EventArgs e)
     {
+        // Set IsWalking to true when movement starts
         animator.SetBool("IsWalking", true);
     }
 
     private void MoveAction_OnStopMoving(object sender, EventArgs e)
     {
+        // Set IsWalking to false when movement stops
         animator.SetBool("IsWalking", false);
     }
 
@@ -63,15 +67,17 @@ public class UnitAnimator : MonoBehaviour
     {
         animator.SetTrigger("Shoot");
 
+        // Play gunshot sound
+        if (audioSource != null && gunShotClip != null)
+            audioSource.PlayOneShot(gunShotClip);
+
         Transform bulletProjectileTransform = 
             Instantiate(bulletProjectilePrefab, shootPointTransform.position, Quaternion.identity);
 
         BulletProjectile bulletProjectile = bulletProjectileTransform.GetComponent<BulletProjectile>();
 
         Vector3 targetUnitShootAtPosition = e.targetUnit.GetWorldPosition();
-
         targetUnitShootAtPosition.y = shootPointTransform.position.y;
-
         bulletProjectile.Setup(targetUnitShootAtPosition);
     }
 
